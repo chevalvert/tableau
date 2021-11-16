@@ -1,0 +1,50 @@
+.items {
+  &__columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    height: 100vh;
+
+    @include mobile {
+      height: unset;
+      grid-template-columns: 1fr;
+    }
+  }
+
+  &__column {
+    position: relative;
+    margin: 0.5rem;
+    padding: 1rem;
+    overflow: hidden;
+
+    display: flex;
+    flex-direction: column;
+
+    &:not(:last-child) {
+      border-right: 1px dashed $color-border;
+      padding-right: 1rem;
+      margin-right: 0;
+    }
+
+    h2 {
+      @include no-select;
+      font-variant: small-caps;
+      font-weight: normal;
+      font-size: 1.4rem;
+      margin-bottom: 2rem;
+
+      position: sticky;
+      top: 0;
+    }
+
+    .item--add {
+      --background: white;
+      --color: black;
+      margin-top: 1rem;
+    }
+  }
+
+  &__items {
+    @include invisible-scroll;
+    flex: 1;
+  }
+}

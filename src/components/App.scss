@@ -1,0 +1,20 @@
+.app {
+  margin: 0 auto;
+
+  .icon--dirty {
+    @include easing(120ms, opacity);
+    position: fixed;
+    right: 1rem;
+    top: 2rem;
+    animation: spin 1s linear infinite;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &.is-dirty .icon--dirty { opacity: 1; }
+
+  &.is-authenticated .login,
+  &:not(.is-authenticated) .items {
+    display: none;
+  }
+}

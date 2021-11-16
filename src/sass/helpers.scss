@@ -1,0 +1,63 @@
+@mixin debug ($color: red) {
+  outline: 1px solid $color;
+}
+
+@mixin easing ($duration: 600ms, $property: all, $will-change: false) {
+  transition: $property $duration cubic-bezier(.215,.61,.355,1);
+  @if $will-change { will-change: $property; }
+}
+
+@mixin no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+@mixin invisible-scroll ($direction: null) {
+  @if $direction == x {
+    overflow-x: scroll;
+    overflow-y: hidden;
+  } @else if $direction == y {
+    overflow-x: hidden;
+    overflow-y: scroll;
+  } @else {
+    overflow-x: scroll;
+    overflow-y: scroll;
+  }
+
+  scrollbar-width: none;
+  scrollbar-height: none;
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    background: transparent;
+  }
+}
+
+@mixin reset-button {
+  width: auto;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+
+  background: transparent;
+  border: none;
+
+  appearance: none;
+
+  -webkit-font-smoothing: inherit;
+  -moz-osx-font-smoothing: inherit;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+
+  &::-moz-focus-inner {
+    padding: 0;
+    border: 0;
+  }
+
+  &:focus { outline: none; }
+}

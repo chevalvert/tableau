@@ -1,0 +1,55 @@
+.item {
+  display: flex;
+
+  margin-bottom: 3px;
+  padding: 5px 7px;
+  height: 32px;
+  border-radius: 3px;
+
+  background: var(--background, black);
+  color: var(--color, white);
+
+  .button, .icon {
+    height: 2.2rem;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  &:not(:hover) .button--trash {
+    @include devices (tablet, desktop) {
+      display: none;
+    }
+  }
+
+  &__handle {
+    cursor: move;
+    margin-left: 0.5rem;
+    margin-right: 1rem;
+  }
+
+  &:focus-within {
+    background: white;
+    color: black;
+  }
+
+  &:focus-within .button--trash {
+    @include devices(tablet, desktop) {
+      display: none;
+    }
+  }
+
+  &__name {
+    @include no-select;
+    cursor: text;
+    flex: 1;
+    align-self: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+
+    &:focus {
+      outline: 0;
+      text-overflow: none;
+    }
+  }
+}

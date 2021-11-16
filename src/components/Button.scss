@@ -1,0 +1,42 @@
+.button {
+  @include no-select;
+  @include reset-button;
+  cursor: pointer;
+  padding: 1rem 0.75rem;
+  line-height: 1rem;
+  font-size: 0.875rem;
+  white-space: nowrap;
+
+  &[disabled],
+  &.is-disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
+
+  span {
+    display: inline-flex;
+    align-items: center;
+    line-height: 0;
+    vertical-align: middle;
+  }
+
+  &__icon + &__text {
+    padding-left: 0.5rem;
+  }
+
+  &:not(:hover) &__text {
+    opacity: 0.75;
+  }
+
+  &.is-waiting { pointer-events: none; }
+
+  &.is-waiting &__icon .icon:first-child,
+  &:not(.is-waiting) &__icon--loading {
+    display: none;
+  }
+
+  &.is-waiting &__icon--loading {
+    display: block;
+    animation: spin 1s linear infinite;
+  }
+}

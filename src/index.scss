@@ -1,0 +1,53 @@
+@import 'sass/reset';
+@import 'sass/devices';
+@import 'sass/helpers';
+
+$color-border: #CCC;
+
+:root {
+  // From Kirby app.css
+  --color-backdrop: rgba(0,0,0,0.6);
+  --color-background: #efefef;
+  --color-border: #ccc;
+  --color-focus: #4271ae;
+  --color-focus-light: #7e9abf;
+  --color-focus-outline: rgba(66,113,174,0.25);
+  --color-negative: #c82829;
+  --color-negative-light: #d16464;
+  --color-negative-outline: rgba(200,40,41,0.25);
+  --color-notice: #f4861f;
+  --color-notice-light: #de935f;
+  --color-positive: #5d800d;
+  --color-positive-light: #a7bd68;
+  --color-positive-outline: rgba(93,128,13,0.25);
+  --color-text: #111;
+  --color-text-light: #777;
+  --font-family-mono: SFMono-Regular,Consolas,Liberation Mono,Menlo,Courier,monospace;
+  --font-size-tiny: 0.75rem;
+  --font-size-small: 0.875rem;
+  --font-size-medium: 1rem;
+  --font-size-large: 1.25rem;
+  --font-size-huge: 1.5rem;
+  --font-size-monster: 1.875rem;
+  --box-shadow-dropdown: 0 10px 15px -3px rgba(0,0,0,0.1),0 4px 6px -2px rgba(0,0,0,0.05);
+  --box-shadow-item: 0 1px 3px 0 rgba(0,0,0,0.1),0 1px 2px 0 rgba(0,0,0,0.06);
+  --box-shadow-focus: 0 20px 25px -5px rgba(0,0,0,0.1),0 10px 10px -5px rgba(0,0,0,0.04);
+
+  @media screen and (min-width: 65em) {
+    --font-size-huge: 1.875rem;
+  }
+}
+
+@keyframes spin {
+  from { transform: rotate(0turn); }
+  to { transform: rotate(1turn); }
+}
+
+@import 'sass/base';
+
+@import 'components/App';
+@import 'components/Button';
+@import 'components/Icon';
+@import 'components/Item';
+@import 'components/Items';
+@import 'components/Login';
