@@ -11,6 +11,7 @@ export default class Item extends Component {
   beforeRender (props) {
     this.handleKeydown = this.handleKeydown.bind(this)
     this.handleColorChange = this.handleColorChange.bind(this)
+    this.handleFocus = this.handleFocus.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
     this.handleDelete = this.handleDelete.bind(this)
 
@@ -20,7 +21,9 @@ export default class Item extends Component {
       colorable: props.colorable === undefined ? true : props.colorable,
 
       column: writable(props.column),
-      colors: writable(props.colors || [])
+      colors: writable(props.colors || []),
+
+      hasFocus: writable(false)
     }
   }
 
@@ -29,6 +32,7 @@ export default class Item extends Component {
       <li
         id={props.id}
         class={classnames('item', props.class)}
+        store-class-has-focus={this.state.hasFocus}
       >
         {state.sortable && <Icon name='bars' class='item__handle' />}
         <div
@@ -37,6 +41,7 @@ export default class Item extends Component {
           class='item__name'
           ref={this.ref('content')}
           event-keydown={this.handleKeydown}
+          event-focus={this.handleFocus}
           event-blur={this.handleBlur}
         >
           {props.name}
@@ -101,8 +106,14 @@ export default class Item extends Component {
     }
   }
 
+  handleFocus () {
+    this.state.hasFocus.set(true)
+    ;(this.props['event-focus'] || noop)(this)
+  }
+
   handleBlur () {
     this.refs.content.scrollLeft = 0
+    this.state.hasFocus.set(false)
     ;(this.props['event-blur'] || noop)(this)
   }
 

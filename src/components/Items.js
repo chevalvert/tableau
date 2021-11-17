@@ -9,6 +9,7 @@ export default class Items extends Component {
   beforeRender (props) {
     this.handleAdd = this.handleAdd.bind(this)
     this.handleSort = this.handleSort.bind(this)
+    this.handleEdit = this.handleEdit.bind(this)
   }
 
   template (props, state) {
@@ -28,7 +29,7 @@ export default class Items extends Component {
                           id={id}
                           {...item}
                           ref={this.refMap(id, 'items')}
-                          event-blur={() => Store.dirty.set(true)}
+                          event-blur={this.handleEdit}
                           event-color={() => Store.dirty.set(true)}
                           event-delete={() => Store.dirty.set(true)}
                         />
@@ -88,6 +89,11 @@ export default class Items extends Component {
       />
     ), this.refs.columns[json.column])
 
+    Store.dirty.set(true)
+  }
+
+  handleEdit (item) {
+    if (item.props.name === item.toJson().name) return
     Store.dirty.set(true)
   }
 
