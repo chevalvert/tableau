@@ -21,6 +21,10 @@
     }
   }
 
+  &.sortable-ghost {
+    visibility: hidden;
+  }
+
   &__handle {
     cursor: move;
     margin-left: 0.5rem;
