@@ -95,12 +95,6 @@ server.on('upgrade', (request, socket, head) => {
   })
 })
 
-//
-app.get('/', (req, res) => {
-
-  console.log({ authenticated: req.session.authenticated })
-})
-
 // Server startup
 server.listen(process.env.HTTP_PORT, () => {
   console.log(new Date(), `Server is up and running on port ${process.env.HTTP_PORT}`)
