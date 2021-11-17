@@ -107,6 +107,7 @@ export default class Item extends Component {
   }
 
   handleDelete () {
+    if (!window.confirm(`Supprimer définitivement "${this.toJson().name}" ?`)) return
     const callback = this.props['event-delete'] || noop
     this.destroy()
     callback()
