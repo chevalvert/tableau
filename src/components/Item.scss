@@ -1,18 +1,29 @@
 .item {
   display: flex;
 
+  font-size: 1.5rem;
   margin-bottom: 3px;
   padding: 5px 7px;
-  height: 32px;
+  height: 34px;
   border-radius: 3px;
 
   background: var(--background, black);
   color: var(--color, white);
 
   .button, .icon {
-    height: 2.2rem;
+    width: 1.2rem;
+    height: 1.2rem;
     padding-top: 0;
     padding-bottom: 0;
+  }
+
+  &__handle {
+    margin-top: 6px;
+  }
+
+  .button--trash {
+    margin-top: 5px;
+    padding: 0 1.3rem;
   }
 
   &:not(:hover) .button--trash {
@@ -36,12 +47,6 @@
     color: black;
   }
 
-  &:focus-within .button--trash {
-    @include devices(tablet, desktop) {
-      display: none;
-    }
-  }
-
   &__name {
     @include no-select;
     cursor: text;
@@ -50,10 +55,41 @@
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    margin-top: -2px;
 
     &:focus {
       outline: 0;
       text-overflow: none;
     }
+  }
+
+  &__colors {
+    input[type='checkbox'] {
+      @include reset-button;
+      pointer: relative;
+      cursor: pointer;
+      margin-top: 4px;
+      height: 1.4rem;
+      width: 1.4rem;
+      margin-left: 3px;
+      border-radius: 100%;
+      background: var(--color);
+
+      // Add a dot inside checked colors
+      &:checked {
+        outline: 0.5rem solid var(--color);
+        outline-offset: -0.5rem;
+        background: black;
+      }
+    }
+  }
+
+  // Hide unchecked colors when not hovering parent item
+  &:not(:hover) &__colors *:not(:checked) { display: none; }
+
+  // Hide dot on checked colors when not hovering parent item
+  &:not(:hover) &__colors *:checked {
+    outline: 0;
+    background: var(--color);
   }
 }

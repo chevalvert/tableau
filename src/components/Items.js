@@ -29,6 +29,7 @@ export default class Items extends Component {
                           {...item}
                           ref={this.refMap(id, 'items')}
                           event-blur={() => Store.dirty.set(true)}
+                          event-color={() => Store.dirty.set(true)}
                           event-delete={() => Store.dirty.set(true)}
                         />
                       )
@@ -42,6 +43,7 @@ export default class Items extends Component {
                   column={index}
                   sortable={false}
                   deletable={false}
+                  colorable={false}
                   event-blur={this.handleAdd}
                 />
               </li>
