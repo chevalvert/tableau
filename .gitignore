@@ -1,4 +1,5 @@
 .env
+server/tableau.json
 
 ####### NODE ########
 .tmp
