@@ -1,6 +1,8 @@
 .env
 server/tableau.json
 
+build/*
+
 ####### NODE ########
 .tmp
 .sass-cache

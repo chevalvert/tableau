@@ -5,7 +5,7 @@
   "scripts": {
     "start": "cross-env NODE_ENV=development node server/index.js",
     "build": "cross-env NODE_ENV=production webpack build --config ./config/webpack.config.prod.js",
-    "preversion": "npm run build && git add build",
+    "preversion": "npm run build && git add --force build/*",
     "postversion": "git push && git push --tags"
   },
   "author": "Arnaud Juracek",
