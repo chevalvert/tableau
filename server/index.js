@@ -27,16 +27,6 @@ const sessionParser = session({
   }
 })
 
-// Middlewares
-app.use((req, res, next) => { console.log(new Date(), req.originalUrl); next() })
-app.use(express.static(path.join(__dirname, '..', 'build')))
-app.use(express.static(path.join(__dirname, '..', 'static')))
-app.use(sessionParser)
-app.use((err, req, res, next) => {
-  console.error(new Date(), err)
-  res.status(500).json({ error: err.message })
-})
-
 // Webpack and HMR in dev
 if (process.env.NODE_ENV === 'development') {
   const webpack = require('webpack')
@@ -51,6 +41,16 @@ if (process.env.NODE_ENV === 'development') {
 
   app.use(require('webpack-hot-middleware')(compiler))
 }
+
+// Middlewares
+app.use((req, res, next) => { console.log(new Date(), req.originalUrl); next() })
+app.use(express.static(path.join(__dirname, '..', 'build')))
+app.use(express.static(path.join(__dirname, '..', 'static')))
+app.use(sessionParser)
+app.use((err, req, res, next) => {
+  console.error(new Date(), err)
+  res.status(500).json({ error: err.message })
+})
 
 // Websocket
 wss.on('connection', ws => {
