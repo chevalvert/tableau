@@ -7,7 +7,7 @@ _tableau.chevalvert.fr_
 
 ```console
 $ git clone https://github.com/chevalvert/tableau
-$ cd caddie
+$ cd tableau
 $ yarn install
 ```
 
