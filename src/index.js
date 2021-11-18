@@ -7,12 +7,17 @@ import App from 'components/App'
 require('webpack-hot-middleware/client?reload=true')
 /// #endif
 
+// TODO: implement https://github.com/automerge/automerge
+
 let websocket
 const app = render(<App />, document.body).components[0]
 
 Store.dirty.subscribe(dirty => {
   if (!dirty || !websocket) return
-  const payload = JSON.stringify(app.items)
+  const payload = JSON.stringify({
+    colors: app.colors,
+    items: app.items
+  })
   websocket.send(payload)
 })
 
@@ -27,7 +32,9 @@ Store.authenticated.subscribe(authenticated => {
 
   // The remote server is the single source of truth
   websocket.onmessage = ({ data }) => {
-    Store.items.set(JSON.parse(data))
+    const { items, colors } = JSON.parse(data)
+    Store.colors.set(colors)
+    Store.items.set(items)
     Store.dirty.set(false)
   }
 })

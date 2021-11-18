@@ -3,6 +3,7 @@
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));
     height: 100vh;
+    padding-bottom: 4.5rem;
 
     @include mobile {
       height: unset;
@@ -21,7 +22,7 @@
 
     &:not(:last-child) {
       border-right: 1px dashed $color-border;
-      padding-right: 1rem;
+      padding-right: 1.5rem;
       margin-right: 0;
     }
 

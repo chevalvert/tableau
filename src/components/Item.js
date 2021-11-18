@@ -33,6 +33,7 @@ export default class Item extends Component {
         id={props.id}
         class={classnames('item', props.class)}
         store-class-has-focus={this.state.hasFocus}
+        style={props.style}
       >
         {state.sortable && <Icon name='bars' class='item__handle' />}
         <div
@@ -50,7 +51,7 @@ export default class Item extends Component {
           <div class='item__colors'>
             {
               Array.from(new Set([
-                ...Store.colors.get(),
+                ...Object.keys(Store.colors.get()),
                 ...state.colors.get()
               ])).map(color => (
                 <input
