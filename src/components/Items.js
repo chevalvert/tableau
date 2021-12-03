@@ -65,7 +65,7 @@ export default class Items extends Component {
     this.sortables = this.refs.columns.map((column, index) => {
       return Sortable.create(column, {
         group: 'column',
-        handle: '.item__handle',
+        handle: '.item',
         onEnd: this.handleSort
       })
     })
