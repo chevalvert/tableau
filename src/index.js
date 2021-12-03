@@ -7,8 +7,6 @@ import App from 'components/App'
 require('webpack-hot-middleware/client?reload=true')
 /// #endif
 
-// TODO: implement https://github.com/automerge/automerge
-
 let websocket
 const app = render(<App />, document.body).components[0]
 
