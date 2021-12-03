@@ -47,7 +47,7 @@
     color: black;
   }
 
-  .has-highlighted &:not(.is-highlighted):not(.has-focus):not(:hover) {
+  .has-highlighted &:not(.is-highlighted):not(.item--add):not(.has-focus):not(:hover) {
     outline: 1px solid black;
     outline-offset: -1px;
     background: transparent;
