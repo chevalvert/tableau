@@ -19,7 +19,7 @@ export default class Items extends Component {
     const hash = window.location.href.match(/\?(.*)\/?/)
     const isHighlighted = (colors = []) => hash && hash[1] && colors
       .map(hex => Store.colors.current[hex])
-      .find(label => label && label.toUpperCase() === hash[1].toUpperCase())
+      .find(label => label && encodeURIComponent(label).toUpperCase() === hash[1].toUpperCase())
 
     return (
       <section class={classnames('items', { 'has-highlighted': !!hash })}>
