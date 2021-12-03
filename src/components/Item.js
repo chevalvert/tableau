@@ -23,7 +23,8 @@ export default class Item extends Component {
       column: writable(props.column),
       colors: writable(props.colors || []),
 
-      hasFocus: writable(false)
+      hasFocus: writable(false),
+      isHighlighted: writable(props.highlighted || false)
     }
   }
 
@@ -33,6 +34,7 @@ export default class Item extends Component {
         id={props.id}
         class={classnames('item', props.class)}
         store-class-has-focus={this.state.hasFocus}
+        store-class-is-highlighted={this.state.isHighlighted}
         style={props.style}
       >
         {state.sortable && <Icon name='bars' class='item__handle' />}

@@ -1,5 +1,6 @@
 import Store from 'store'
 import { Component } from 'utils/jsx'
+import classnames from 'classnames'
 import cuid from 'cuid'
 
 import Sortable from 'sortablejs'
@@ -13,8 +14,15 @@ export default class Items extends Component {
   }
 
   template (props, state) {
+    // Allow highlighthing items via https://…/?query with query being the name
+    // of one color
+    const hash = window.location.href.match(/\?(.*)\/?/)
+    const isHighlighted = (colors = []) => hash && hash[1] && colors
+      .map(hex => Store.colors.current[hex])
+      .find(label => label && label.toUpperCase() === hash[1].toUpperCase())
+
     return (
-      <section class='items'>
+      <section class={classnames('items', { 'has-highlighted': !!hash })}>
         <ul class='items__columns'>
           {
             Store.columns.get().map((title, index) => (
@@ -29,6 +37,7 @@ export default class Items extends Component {
                           id={id}
                           {...item}
                           ref={this.refMap(id, 'items')}
+                          highlighted={isHighlighted(item.colors)}
                           event-blur={this.handleEdit}
                           event-color={() => Store.dirty.set(true)}
                           event-delete={() => Store.dirty.set(true)}

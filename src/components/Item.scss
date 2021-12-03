@@ -47,6 +47,10 @@
     color: black;
   }
 
+  .has-highlighted &:not(.is-highlighted):not(:hover) {
+    opacity: 0.1;
+  }
+
   &__name {
     @include no-select;
     cursor: text;
