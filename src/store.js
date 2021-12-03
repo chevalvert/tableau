@@ -1,7 +1,7 @@
 import { readable, writable } from 'utils/state'
 
 const Store = {
-  columns: readable(['en cours', 'à venir', '?']),
+  columns: readable(['en cours', 'en pause', 'à venir', '?']),
   colors: writable({}),
 
   authenticated: writable(false),
