@@ -57,6 +57,7 @@
     "fs-extra": "^10.0.0",
     "mime-db": "^1.51.0",
     "reconnectingwebsocket": "^1.0.0",
+    "session-file-store": "^1.5.0",
     "sortablejs": "^1.14.0",
     "ws": "^8.2.2"
   }

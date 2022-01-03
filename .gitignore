@@ -1,5 +1,6 @@
 .env
 server/tableau.json
+server/sessions
 
 build/*
 
