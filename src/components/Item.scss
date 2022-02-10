@@ -74,7 +74,7 @@
   &__colors {
     input[type='checkbox'] {
       @include reset-button;
-      pointer: relative;
+      position: relative;
       cursor: pointer;
       margin-top: 4px;
       height: 1.4rem;
@@ -84,10 +84,16 @@
       background: var(--color);
 
       // Add a dot inside checked colors
-      &:checked {
-        outline: 0.5rem solid var(--color);
-        outline-offset: -0.5rem;
+      &:checked::after {
+        content: '';
         background: black;
+        position: absolute;
+        width: 0.5rem;
+        height: 0.5rem;
+        top: 50%;
+        border-radius: 100%;
+        left: 50%;
+        transform: translate(-50%, -50%);
       }
     }
   }
@@ -96,8 +102,7 @@
   &:not(:hover) &__colors *:not(:checked) { display: none; }
 
   // Hide dot on checked colors when not hovering parent item
-  &:not(:hover) &__colors *:checked {
-    outline: 0;
-    background: var(--color);
+  &:not(:hover) &__colors *:checked::after {
+    display: none;
   }
 }
