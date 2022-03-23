@@ -1,6 +1,6 @@
 {
   "name": "tableau",
-  "version": "1.8.1",
+  "version": "1.8.2",
   "description": "personal macro-organization tool",
   "scripts": {
     "start": "cross-env NODE_ENV=development node server/index.js",
