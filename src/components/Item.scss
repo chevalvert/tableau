@@ -65,6 +65,10 @@
     text-overflow: ellipsis;
     margin-top: -2px;
 
+    // Fix contenteditable not working on Safari
+    -webkit-user-select: text;
+    user-select: text;
+
     &:focus {
       outline: 0;
       text-overflow: none;
