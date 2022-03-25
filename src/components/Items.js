@@ -4,7 +4,9 @@ import classnames from 'classnames'
 import cuid from 'cuid'
 
 import Sortable from 'sortablejs'
+
 import Item from 'components/Item'
+import Button from 'components/Button'
 
 export default class Items extends Component {
   beforeRender (props) {
@@ -41,7 +43,9 @@ export default class Items extends Component {
                           event-blur={this.handleEdit}
                           event-color={() => Store.dirty.set(true)}
                           event-delete={() => Store.dirty.set(true)}
-                        />
+                        >
+                          <Button icon='trash' class='button--trash' event-click={() => this.handleDelete(id)} />
+                        </Item>
                       )
                     })
                   }
@@ -94,7 +98,6 @@ export default class Items extends Component {
         {...json}
         ref={this.refMap(id, 'items')}
         event-blur={() => Store.dirty.set(true)}
-        event-delete={() => Store.dirty.set(true)}
       />
     ), this.refs.columns[json.column])
 
@@ -109,6 +112,15 @@ export default class Items extends Component {
   handleSort (e) {
     const item = this.refs.items.get(e.item.id)
     item.state.column.set(parseInt(e.to.dataset.column))
+    Store.dirty.set(true)
+  }
+
+  handleDelete (id) {
+    const item = this.refs.items.get(id)
+    if (!item) return
+
+    if (!window.confirm(`Supprimer définitivement "${item.toJson().name}" ?`)) return
+    item.destroy()
     Store.dirty.set(true)
   }
 

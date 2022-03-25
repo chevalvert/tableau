@@ -21,12 +21,16 @@
     margin-top: 6px;
   }
 
-  .button--trash {
+  &__buttons {
+    display: flex;
+  }
+
+  &__buttons .button {
     margin-top: 5px;
     padding: 0 1.3rem;
   }
 
-  &:not(:hover) .button--trash {
+  &:not(:hover) &__buttons {
     @include devices (tablet, desktop) {
       display: none;
     }

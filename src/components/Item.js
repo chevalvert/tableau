@@ -2,7 +2,6 @@ import Store from 'store'
 import { Component } from 'utils/jsx'
 import { writable } from 'utils/state'
 import classnames from 'classnames'
-import Button from 'components/Button'
 import Icon from 'components/Icon'
 
 import noop from 'utils/noop'
@@ -13,11 +12,9 @@ export default class Item extends Component {
     this.handleColorChange = this.handleColorChange.bind(this)
     this.handleFocus = this.handleFocus.bind(this)
     this.handleBlur = this.handleBlur.bind(this)
-    this.handleDelete = this.handleDelete.bind(this)
 
     this.state = {
       sortable: props.sortable === undefined ? true : props.sortable,
-      deletable: props.deletable === undefined ? true : props.deletable,
       colorable: props.colorable === undefined ? true : props.colorable,
 
       column: writable(props.column),
@@ -66,7 +63,7 @@ export default class Item extends Component {
             }
           </div>
         )}
-        {state.deletable && <Button icon='trash' class='button--trash' event-click={this.handleDelete} />}
+        {props.children && <div class='item__buttons'>{props.children}</div>}
       </li>
     )
   }
@@ -118,12 +115,5 @@ export default class Item extends Component {
     this.refs.content.scrollLeft = 0
     this.state.hasFocus.set(false)
     ;(this.props['event-blur'] || noop)(this)
-  }
-
-  handleDelete () {
-    if (!window.confirm(`Supprimer définitivement "${this.toJson().name}" ?`)) return
-    const callback = this.props['event-delete'] || noop
-    this.destroy()
-    callback()
   }
 }
