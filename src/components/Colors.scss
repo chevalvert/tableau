@@ -25,5 +25,13 @@
     @include mobile {
       flex: 33.33%;
     }
+
+    .item__buttons .button {
+      margin-top: -1px;
+    }
+  }
+
+  &.has-highlighted .is-highlighted .item__buttons {
+    display: flex;
   }
 }
