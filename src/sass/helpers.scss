@@ -1,3 +1,11 @@
+@mixin inset ($d: 0, $position: absolute) {
+  position: $position;
+  top: $d;
+  left: $d;
+  right: $d;
+  bottom: $d;
+}
+
 @mixin debug ($color: red) {
   outline: 1px solid $color;
 }
