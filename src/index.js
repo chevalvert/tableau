@@ -13,6 +13,7 @@ const app = render(<App />, document.body).components[0]
 Store.dirty.subscribe(dirty => {
   if (!dirty || !websocket) return
   const payload = JSON.stringify({
+    columns: Store.columns.current,
     colors: app.colors,
     items: app.items
   })
@@ -30,7 +31,8 @@ Store.authenticated.subscribe(authenticated => {
 
   // The remote server is the single source of truth
   websocket.onmessage = ({ data }) => {
-    const { items, colors } = JSON.parse(data)
+    const { items, colors, columns } = JSON.parse(data)
+    Store.columns.set(columns)
     Store.colors.set(colors)
     Store.items.set(items)
     Store.dirty.set(false)

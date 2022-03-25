@@ -1,7 +1,7 @@
-import { derived, readable, writable } from 'utils/state'
+import { derived, writable } from 'utils/state'
 
 const Store = {
-  columns: readable(['en cours', 'en pause', 'à venir', '?']),
+  columns: writable(['items']),
   colors: writable({}),
 
   authenticated: writable(false),
