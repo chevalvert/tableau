@@ -22,6 +22,7 @@ const MONTHS = [
 const YEAR_PROGRESS = (new Date().getTime() - new Date(new Date().getFullYear(), 0, 1).getTime()) / (new Date(new Date().getFullYear() + 1, 0, 1).getTime() - new Date(new Date().getFullYear(), 0, 1).getTime())
 
 // Cache scroll so that app can render without jumps
+let _scrollTop = 0
 let _scrollLeft = 0
 
 export default class Timeline extends Component {
@@ -60,6 +61,18 @@ export default class Timeline extends Component {
                 ))
               }
             </div>
+            <div class='timeline__ticks'>
+              {
+                MONTHS.map(month => (
+                  <div class='timeline__month'>
+                    <div class='timeline__week' />
+                    <div class='timeline__week' />
+                    <div class='timeline__week' />
+                    <div class='timeline__week' />
+                  </div>
+                ))
+              }
+            </div>
             <ul
               class='timeline__items'
               ref={this.ref('timeline')}
@@ -68,7 +81,7 @@ export default class Timeline extends Component {
                 Store.items.current
                   .filter(item => item.timeline)
                   .sort((a, b) => a.timeline.index - b.timeline.index)
-                  .map(item => <Item data={item} sortable resizable colorable />)
+                  .map(item => <Item data={item} sortable resizable />)
               }
             </ul>
           </div>
@@ -80,7 +93,7 @@ export default class Timeline extends Component {
           {
             Store.items.current
               .filter(item => !item.timeline)
-              .map(item => <Item data={item} sortable colorable />)
+              .map(item => <Item data={item} sortable />)
           }
         </div>
       </section>
@@ -88,6 +101,7 @@ export default class Timeline extends Component {
   }
 
   afterMount () {
+    this.refs.scrollable.scrollTop = _scrollTop
     this.refs.scrollable.scrollLeft = _scrollLeft
 
     this.sortables = []
@@ -116,7 +130,7 @@ export default class Timeline extends Component {
       let index = 0
       for (const { id } of this.refs.timeline.querySelectorAll('.item')) {
         const item = find(id)
-        item.timeline = item.timeline || {}
+        item.timeline = item.timeline || { start: 48 * YEAR_PROGRESS, end: 48 * YEAR_PROGRESS + 4 }
         item.timeline.index = index++
       }
 
@@ -128,6 +142,7 @@ export default class Timeline extends Component {
   }
 
   handleScroll (e) {
+    _scrollTop = this.refs.scrollable.scrollTop
     _scrollLeft = this.refs.scrollable.scrollLeft
   }
 

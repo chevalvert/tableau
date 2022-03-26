@@ -101,38 +101,39 @@ export default class Item extends Component {
             />
           ))
         )}
-        {props.sortable && <Icon name='bars' class='item__handle' />}
-        <div
-          contentEditable
-          placeholder={props.placeholder}
-          class='item__name'
-          ref={this.ref('content')}
-          event-keydown={this.handleKeydown}
-          event-focus={this.handleFocus}
-          event-blur={this.handleBlur}
-        >
-          {name}
-        </div>
-        {props.colorable && (
-          <div class='item__colors'>
-            {
-              Array.from(new Set([
-                ...Object.keys(Store.colors.get()),
-                ...(colors || [])
-              ])).map(color => (
-                <input
-                  type='checkbox'
-                  style={`--color: ${color}`}
-                  checked={colors && colors.includes(color)}
-                  event-change={this.handleColor(color)}
-                />
-              ))
-            }
+        <div class='item__content'>
+          {props.sortable && <Icon name='bars' class='item__handle' />}
+          <div
+            placeholder={props.placeholder}
+            class='item__name'
+            ref={this.ref('content')}
+            event-keydown={this.handleKeydown}
+            event-focus={this.handleFocus}
+            event-blur={this.handleBlur}
+          >
+            {name}
           </div>
-        )}
-        <div class='item__buttons'>
-          {props.children}
-          {props.deletable && <Button icon='trash' class='button--trash' event-click={this.handleDelete} />}
+          {props.colorable && (
+            <div class='item__colors'>
+              {
+                Array.from(new Set([
+                  ...Object.keys(Store.colors.get()),
+                  ...(colors || [])
+                ])).map(color => (
+                  <input
+                    type='checkbox'
+                    style={`--color: ${color}`}
+                    checked={colors && colors.includes(color)}
+                    event-change={this.handleColor(color)}
+                  />
+                ))
+              }
+            </div>
+          )}
+          <div class='item__buttons'>
+            {props.children}
+            {props.deletable && <Button icon='trash' class='button--trash' event-click={this.handleDelete} />}
+          </div>
         </div>
       </li>
     )

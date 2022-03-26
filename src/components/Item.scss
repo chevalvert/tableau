@@ -3,6 +3,11 @@
   position: relative;
   display: flex;
 
+  &__content {
+    display: flex;
+    width: 100%;
+  }
+
   .button, .icon {
     width: 1.2rem;
     height: 1.2rem;
@@ -11,7 +16,9 @@
   }
 
   &__handle {
+    @include easing(120ms, opacity);
     margin-top: 6px;
+    .item:not(:hover) & { opacity: 0.6; }
   }
 
   &__buttons {

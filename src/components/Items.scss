@@ -55,4 +55,10 @@
     @include invisible-scroll;
     flex: 1;
   }
+
+  .item:not(:hover) .item__colors {
+    @include tablet {
+      display: none;
+    }
+  }
 }

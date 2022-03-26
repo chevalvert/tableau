@@ -27,7 +27,7 @@ $color-background: #EFEFEF;
     outline: 1px solid $color-border;
     outline-offset: -1px;
 
-    [contenteditable], .button, .item__handle {
+    .item__content {
       opacity: 0.1;
     }
 

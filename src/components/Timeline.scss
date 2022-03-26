@@ -31,28 +31,28 @@
   &__content {
     position: relative;
     width: min-content;
-    height: 100%;
+    min-height: 100%;
   }
 
   &__months {
-    pointer-events: none;
+    z-index: 1;
+    position: sticky;
+    top: 0;
     display: flex;
-    height: 100%;
     padding: 0 1.5rem;
+    height: 4.9rem;
+    background: $color-background;
   }
 
   &__month {
     display: flex;
-
     position: relative;
+
     border-left: 1px solid $color-border;
+    &:first-child { border: 0; }
+    &:first-child::before { margin-left: -1.5rem; }
 
-    &:first-child {
-      border: 0;
-      &::before { margin-left: -1.5rem; }
-    }
-
-    &::before {
+    &[data-month]::before {
       content: attr(data-month);
 
       position: absolute;
@@ -72,33 +72,33 @@
 
   &__week {
     flex: 1;
-    border-left: 1px dashed $color-border;
     min-width: 5rem;
+  }
 
-    &:first-child {
-      border-left: 0;
-    }
+  &__ticks {
+    @include inset(0);
+    pointer-events: none;
+    display: flex;
+    padding: 0 1.5rem;
+    bottom: -5rem;
+  }
+
+  &__ticks &__week {
+    border-left: 1px dashed $color-border;
+    &:first-child { border: 0; }
   }
 
   &__current {
     pointer-events: none;
     z-index: 2;
     position: absolute;
-    // top: 4.7rem;
     top: 0;
-    bottom: 0;
+    bottom: -5rem;
     border-left: 2px solid #ff6188;
     left: calc(100% * var(--start));
   }
 
   &__items {
-    @include invisible-scroll(y);
-    z-index: 1;
-    position: absolute;
-    top: 5rem;
-    left: 0;
-    bottom: 0;
-    width: 100%;
     padding: 0 1.5rem 1.5rem;
   }
 
@@ -114,5 +114,12 @@
     &.is-small .item__colors {
       display: none;
     }
+  }
+
+  &__items .item__content {
+    position: sticky;
+    left: 1rem;
+    padding-right: 1.5rem;
+    max-width: min-content;
   }
 }
