@@ -8,6 +8,46 @@ import hash from 'object-hash'
 import Button from 'components/Button'
 import Icon from 'components/Icon'
 
+const FILTER = {
+  or: function () {
+    const names = Store.filter.get()
+    if (!names) return
+
+    // WARNING: potential memory leak
+    if (!this.state) return
+
+    const { colors } = this.state.data.get()
+    if (!colors) return
+
+    for (const hex of (colors || [])) {
+      const color = Store.colors.current[hex]
+      if (color && names.includes(color.toLowerCase())) return true
+    }
+  },
+
+  and: function () {
+    const names = Store.filter.get()
+    if (!names) return
+
+    // WARNING: potential memory leak
+    if (!this.state) return
+
+    const { colors } = this.state.data.get()
+    if (!colors) return
+
+    const itemNames = []
+    for (const hex in Store.colors.get()) {
+      if (colors.includes(hex)) itemNames.push(Store.colors.current[hex].toLowerCase())
+    }
+
+    for (const name of names) {
+      if (!itemNames.includes(name)) return false
+    }
+
+    return true
+  }
+}
+
 export default class Item extends Component {
   beforeRender (props) {
     this.handleData = this.handleData.bind(this)
@@ -31,18 +71,7 @@ export default class Item extends Component {
       isFiltered: undefined // See below
     }
 
-    this.state.isFiltered = derived(Store.filter, names => {
-      if (!names) return
-
-      // WARNING: potential memory leak
-      if (!this.state) return
-
-      const { colors } = this.state.data.get()
-      for (const hex of (colors || [])) {
-        const color = Store.colors.current[hex]
-        if (color && names.includes(color.toLowerCase())) return true
-      }
-    })
+    this.state.isFiltered = derived(Store.filter, FILTER.and.bind(this))
   }
 
   template (props, state) {
