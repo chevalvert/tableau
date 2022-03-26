@@ -56,6 +56,7 @@
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.0",
+    "imurmurhash": "^0.1.4",
     "mime-db": "^1.51.0",
     "missing-math": "^3.2.0",
     "object-hash": "^3.0.0",
