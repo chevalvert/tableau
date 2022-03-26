@@ -4,10 +4,13 @@ import { derived, writable } from 'utils/state'
 import { clamp, map } from 'missing-math'
 import classnames from 'classnames'
 import hash from 'object-hash'
+import firstScrollableParent from 'utils/first-scrollable-parent'
 
 import Button from 'components/Button'
 import Icon from 'components/Icon'
 
+const AUTOSCROLL_THRESHOLD = 20
+const AUTOSCROLL_AMOUNT = 10
 const FILTER = {
   or: function () {
     const names = Store.filter.get()
@@ -215,15 +218,31 @@ export default class Item extends Component {
     this.refs.dragged.start = e.pageX
     this.refs.dragged.initialLeft = this.base.offsetLeft
     this.refs.dragged.initialWidth = this.base.offsetWidth
+    this.refs.dragged.containerWidth = this.base.parentNode.offsetWidth
+    this.refs.dragged.scrollable = firstScrollableParent(this.base, 'horizontal')
   }
 
   handleMouseMove (e) {
     if (!this.refs.dragged) return
-    const deltaX = e.pageX - this.refs.dragged.start
+
+    // Autoscroll on reaching window boundaries if inside a scrollable container
+    if (this.refs.dragged.scrollable) {
+      if (e.pageX + AUTOSCROLL_THRESHOLD > window.innerWidth) {
+        this.refs.dragged.scrollable.scrollLeft += AUTOSCROLL_AMOUNT
+        this.refs.dragged.start -= AUTOSCROLL_AMOUNT
+      }
+
+      if (e.pageX - AUTOSCROLL_THRESHOLD < 0) {
+        this.refs.dragged.scrollable.scrollLeft -= AUTOSCROLL_AMOUNT
+        this.refs.dragged.start += AUTOSCROLL_AMOUNT
+      }
+    }
 
     let left
     let width
+    const deltaX = e.pageX - this.refs.dragged.start
 
+    // Handle drag/resize using the left handle
     if (this.refs.dragged.dataset.side === 'before') {
       left = this.refs.dragged.initialLeft + deltaX
       width = e.shiftKey
@@ -231,6 +250,7 @@ export default class Item extends Component {
         : (this.refs.dragged.initialWidth - deltaX)
     }
 
+    // Handle drag/resize using the right handle
     if (this.refs.dragged.dataset.side === 'after') {
       left = e.shiftKey
         ? this.refs.dragged.initialLeft + deltaX
@@ -240,11 +260,10 @@ export default class Item extends Component {
         : this.refs.dragged.initialWidth + deltaX
     }
 
-    const containerWidth = this.base.parentNode.offsetWidth
+    // Compute the new range data from the resized dimensions
     // TODO: use the correct 0-52 weeks
-    const start = clamp(Math.round(map(left, 0, containerWidth, 0, 48)), 0, 48)
-    const end = clamp(Math.round(map(left + width, 0, containerWidth, 0, 48)), 0, 48)
-
+    const start = clamp(Math.round(map(left, 0, this.refs.dragged.containerWidth, 0, 48)), 0, 48)
+    const end = clamp(Math.round(map(left + width, 0, this.refs.dragged.containerWidth, 0, 48)), 0, 48)
     if (start >= end) return
     if (end <= start) return
 
