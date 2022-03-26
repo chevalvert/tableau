@@ -23,9 +23,17 @@ $color-background: #EFEFEF;
 
   .has-filter &:not(.is-filtered):not(.has-focus):not(:hover) {
     --background: #{$color-background};
-    --color: #{$color-border};
+    --color: #000;
     outline: 1px solid $color-border;
     outline-offset: -1px;
+
+    [contenteditable], .button, .item__handle {
+      opacity: 0.1;
+    }
+
+    .item__colors {
+      display: none;
+    }
   }
 }
 
