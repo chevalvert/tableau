@@ -290,6 +290,7 @@ export default class Item extends Component {
   }
 
   handleDelete () {
+    if (!window.confirm(`Supprimer définitivement "${this.state.data.current.name}" ?`)) return
     this.state.data.update(data => ({ ...data, deleted: true }), true)
   }
 
