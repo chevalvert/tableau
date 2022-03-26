@@ -1,60 +1,44 @@
 import Store from 'store'
 import { Component } from 'utils/jsx'
-import cuid from 'cuid'
-
-import Sortable from 'sortablejs'
+import hash from 'object-hash'
+import { Sortable, AutoScroll } from 'sortablejs/modular/sortable.core.esm.js'
 
 import Item from 'components/Item'
-import Button from 'components/Button'
+
+Sortable.mount(new AutoScroll())
+
+// Cache scroll so that app can render without jumps
+let _scrollLeft = 0
 
 export default class Items extends Component {
   beforeRender (props) {
     this.handleAdd = this.handleAdd.bind(this)
+    this.handleScroll = this.handleScroll.bind(this)
     this.handleSort = this.handleSort.bind(this)
-    this.handleEdit = this.handleEdit.bind(this)
   }
 
   template (props, state) {
     return (
-      <section class='items' store-class-has-highlighted={Store.highlighted}>
-        <ul class='items__columns'>
+      <section class='items'>
+        <ul
+          class='items__columns'
+          ref={this.ref('scrollable')}
+          event-scroll={this.handleScroll}
+        >
           {
             Store.columns.get().map((title, index) => (
               <li class='items__column'>
                 <h2>{title}</h2>
                 <ul class='items__items' data-column={index} ref={this.refArray('columns')}>
                   {
-                    props.items.filter(item => item.column === index).map(item => {
-                      const id = cuid()
-                      const highlighted = Store.highlighted.current &&
-                        item.colors.includes(Store.highlighted.current.color)
-
-                      return (
-                        <Item
-                          id={id}
-                          {...item}
-                          ref={this.refMap(id, 'items')}
-                          highlighted={highlighted}
-                          event-blur={this.handleEdit}
-                          event-color={() => Store.dirty.set(true)}
-                          event-delete={() => Store.dirty.set(true)}
-                        >
-                          <Button icon='trash' class='button--trash' event-click={() => this.handleDelete(id)} />
-                        </Item>
-                      )
-                    })
+                    Store.items.current.map(item => item.column === index && (
+                      <Item data={item} deletable sortable colorable />
+                    ))
                   }
                 </ul>
-                <Item
-                  class='item--add'
-                  placeholder='Nouvelle tâche'
-                  ref={this.refMap(index, 'adders')}
-                  column={index}
-                  sortable={false}
-                  deletable={false}
-                  colorable={false}
-                  event-blur={this.handleAdd}
-                />
+                <form event-submit={this.handleAdd(index)}>
+                  <input type='text' placeholder='Nouvelle tâche' />
+                </form>
               </li>
             ))
           }
@@ -63,63 +47,65 @@ export default class Items extends Component {
     )
   }
 
-  get items () {
-    return this.refs.items
-      ? Array.from(this.refs.items.values()).sort((a, b) => a.DOMIndex - b.DOMIndex).map(item => item.toJson())
-      : []
-  }
-
   afterMount () {
+    if (!this.refs.columns) return
+
+    this.refs.scrollable.scrollLeft = _scrollLeft
+
     this.sortables = this.refs.columns.map((column, index) => {
       return Sortable.create(column, {
         group: 'column',
         handle: '.item__handle',
-        onEnd: this.handleSort
+        onEnd: this.handleSort,
+        scroll: true,
+        scrollSensitivity: 100, // px, how near the mouse must be to an edge to start scrolling.
+        scrollSpeed: 10, // px, speed of the scrolling
+        bubbleScroll: true // apply autoscroll to all parent elements, allowing for easier movement
       })
     })
   }
 
-  handleAdd (item) {
-    const json = item.toJson()
-    if (!json.name) return
-
-    const input = this.refs.adders.get(json.column)
-    if (input) input.refs.content.textContent = ''
-
-    const id = cuid()
-    this.render((
-      <Item
-        id={id}
-        {...json}
-        ref={this.refMap(id, 'items')}
-        event-blur={() => Store.dirty.set(true)}
-      />
-    ), this.refs.columns[json.column])
-
-    Store.dirty.set(true)
+  handleScroll (e) {
+    _scrollLeft = this.refs.scrollable.scrollLeft
   }
 
-  handleEdit (item) {
-    if (item.props.name === item.toJson().name) return
-    Store.dirty.set(true)
+  handleAdd (column) {
+    return e => {
+      e.preventDefault()
+      const input = e.target.querySelector('input')
+      if (!input || !input.value) return
+      Store.items.update(items => {
+        items.push({ name: input.value, column })
+        return items
+      }, true)
+      Store.dirty.set(true)
+    }
   }
 
   handleSort (e) {
-    const item = this.refs.items.get(e.item.id)
-    item.state.column.set(parseInt(e.to.dataset.column))
-    Store.dirty.set(true)
-  }
+    const previous = hash(Store.items.get())
 
-  handleDelete (id) {
-    const item = this.refs.items.get(id)
-    if (!item) return
+    // Re-create the items array based on DOM order
+    const items = []
+    for (const column of this.refs.columns) {
+      for (const { id } of column.querySelectorAll('.item')) {
+        const item = Store.items.current.find(item => item.index === +id)
 
-    if (!window.confirm(`Supprimer définitivement "${item.toJson().name}" ?`)) return
-    item.destroy()
+        // Ensure current dropped item column is updated
+        if (id === e.item.id) item.column = parseInt(e.to.dataset.column)
+
+        items.push(item)
+      }
+    }
+
+    // Update the Store only if needed
+    if (hash(items) === previous) return
+
+    Store.items.set(items)
     Store.dirty.set(true)
   }
 
   beforeDestroy () {
-    this.sortables.forEach(sortable => sortable.destroy())
+    ;(this.sortables || []).forEach(sortable => sortable.destroy())
   }
 }

@@ -1,5 +1,4 @@
 .button {
-  @include no-select;
   @include reset-button;
   cursor: pointer;
   padding: 1rem 0.75rem;

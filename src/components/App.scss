@@ -1,8 +1,20 @@
 .app {
   margin: 0 auto;
 
+  display: flex;
+  flex-direction: column;
+
+
+  .items, .timeline {
+    scroll-snap-align: start end;
+    height: calc(100vh - 5rem);
+  }
+
+  .colors {}
+
   .icon--dirty {
     @include easing(120ms, opacity);
+    z-index: 2;
     position: fixed;
     right: 1rem;
     top: 2rem;
@@ -14,7 +26,7 @@
   &.is-dirty .icon--dirty { opacity: 1; }
 
   &.is-authenticated .login,
-  &:not(.is-authenticated) .items {
+  &:not(.is-authenticated) > *:not(.login) {
     display: none;
   }
 }

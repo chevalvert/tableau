@@ -1,24 +1,29 @@
 .items {
-  &__columns {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
-    height: 100vh;
-    padding-bottom: 4.5rem;
+  display: flex;
 
-    @include mobile {
-      height: unset;
-      grid-template-columns: 1fr;
-    }
+  &__columns {
+    @include invisible-scroll;
+    scroll-snap-type: x mandatory;
+    display: flex;
+    flex: 1;
+    align-items: stretch;
   }
 
   &__column {
+    scroll-snap-align: start end;
+    flex: 1;
     position: relative;
-    margin: 0.5rem;
+    margin: 0.5rem 0;
+    gap: 0.5rem;
     padding: 1rem;
     overflow: hidden;
 
     display: flex;
     flex-direction: column;
+
+    @include mobile {
+      min-width: 100vw;
+    }
 
     &:not(:last-child) {
       border-right: 1px dashed $color-border;
@@ -27,7 +32,6 @@
     }
 
     h2 {
-      @include no-select;
       font-variant: small-caps;
       font-weight: normal;
       font-size: 1.4rem;
@@ -37,10 +41,13 @@
       top: 0;
     }
 
-    .item--add {
+    input[type=text] {
+      @include reset-button;
+      @include item;
       --background: white;
       --color: black;
       margin-top: 1rem;
+      width: 100%;
     }
   }
 

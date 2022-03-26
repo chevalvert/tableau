@@ -1,21 +1,22 @@
 import { Readable } from './readable'
+import clone from 'clone'
 
 class Writable extends Readable {
   set (value, force) {
     if (!force && this.current === value) return
-    const previous = this.current
+    this.previous = this.current
 
     this.current = value
     let node = this._first
     while (node) {
-      node.fn.call(node.ctx, this.current, previous)
+      node.fn.call(node.ctx, this.current, this.previous)
       node.once && this.unsubscribe(node)
       node = node.next
     }
   }
 
   update (cb, force) {
-    const value = cb(this.current)
+    const value = cb(clone(this.current, false))
     this.set(value !== undefined ? value : this.current, force)
   }
 }

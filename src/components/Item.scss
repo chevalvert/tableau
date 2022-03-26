@@ -1,14 +1,7 @@
 .item {
+  @include item;
+  position: relative;
   display: flex;
-
-  font-size: 1.5rem;
-  margin-bottom: 3px;
-  padding: 5px 7px;
-  height: 34px;
-  border-radius: 3px;
-
-  background: var(--background, black);
-  color: var(--color, white);
 
   .button, .icon {
     width: 1.2rem;
@@ -40,6 +33,28 @@
     visibility: hidden;
   }
 
+  &.sortable-chosen {
+    width: auto;
+  }
+
+  &__resize-handle {
+    z-index: 2;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+
+    // Increase hitbox
+    width: 1rem;
+    cursor: ew-resize;
+
+    @include mobile {
+      display: none;
+    }
+
+    &[data-side='before'] { left: -0.5rem; }
+    &[data-side='after'] { right: -0.25rem; }
+  }
+
   &__handle {
     cursor: move;
     margin-left: 0.5rem;
@@ -51,16 +66,7 @@
     color: black;
   }
 
-  .has-highlighted &:not(.is-highlighted):not(.item--add):not(.has-focus):not(:hover) {
-    outline: 1px solid black;
-    outline-offset: -1px;
-    background: transparent;
-    color: black;
-    opacity: 0.1;
-  }
-
   &__name {
-    @include no-select;
     cursor: text;
     flex: 1;
     align-self: center;
@@ -76,6 +82,14 @@
     &:focus {
       outline: 0;
       text-overflow: none;
+    }
+  }
+
+  &.is-resizing {
+    @include easing(120ms, transform);
+    transform: scale(1, 0.1);
+    * {
+      visibility: hidden;
     }
   }
 

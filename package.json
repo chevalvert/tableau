@@ -50,15 +50,18 @@
   },
   "dependencies": {
     "classnames": "^2.3.1",
+    "clone": "^2.1.2",
     "cuid": "^2.1.8",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "express-session": "^1.17.2",
     "fs-extra": "^10.0.0",
     "mime-db": "^1.51.0",
+    "missing-math": "^3.2.0",
+    "object-hash": "^3.0.0",
     "reconnectingwebsocket": "^1.0.0",
     "session-file-store": "^1.5.0",
-    "sortablejs": "^1.14.0",
+    "sortablejs": "^1.15.0",
     "ws": "^8.2.2"
   }
 }

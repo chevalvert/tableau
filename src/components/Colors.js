@@ -1,39 +1,49 @@
 import Store from 'store'
 import { Component } from 'utils/jsx'
+import classnames from 'classnames'
+import cuid from 'cuid'
+import noop from 'utils/noop'
 
-import Item from 'components/Item'
-import Button from 'components/Button'
+import Icon from 'components/Icon'
 
 export default class Colors extends Component {
   beforeRender () {
     this.handleEdit = this.handleEdit.bind(this)
+    this.handlePreview = this.handlePreview.bind(this)
   }
 
   template (props) {
     return (
-      <section class='colors' store-class-has-highlighted={Store.highlighted}>
+      <section class='colors'>
         {
-          Object.entries(Store.colors.get() || {}).map(([color, name]) => {
-            const highlighted = Store.highlighted.current && Store.highlighted.current.match(name)
+          Object.entries(Store.colors.get() || {}).map(([hex, name]) => {
+            const id = cuid()
+            const selected = name && Store.filter.current && Store.filter.current.includes(name.toLowerCase())
             return (
-              <Item
-                style={`--color: black; --background: ${color}`}
-                colorable={false}
-                sortable={false}
-                deletable={false}
-                highlighted={highlighted}
-                data-color={color}
-                name={name}
-                event-blur={this.handleEdit}
-                ref={this.refArray('items')}
+              <form
+                class={classnames('color', { 'is-filtered': selected })}
+                style={`--color: black; --background: ${hex}`}
+                event-submit={this.handleEdit(hex)}
               >
-                {name && (
-                  <Button
-                    icon={highlighted ? 'hidden' : 'preview'}
-                    event-click={() => this.handlePreview(name)}
-                  />
-                )}
-              </Item>
+                <input
+                  type='text'
+                  value={name}
+                  class={classnames({ 'is-filtered': selected })}
+                  event-blur={this.handleEdit(hex)}
+                />
+                {name && [
+                  <input
+                    id={id}
+                    type='checkbox'
+                    checked={selected}
+                    event-change={this.handlePreview(name)}
+                  />,
+                  <label for={id}>
+                    <Icon name='preview' class='icon--preview' />
+                    <Icon name='hidden' class='icon--hidden' />
+                  </label>
+                ]}
+              </form>
             )
           })
         }
@@ -41,26 +51,31 @@ export default class Colors extends Component {
     )
   }
 
-  get colors () {
-    const colors = {}
+  handleEdit (hex) {
+    return e => {
+      e.preventDefault()
+      const input = e.target.tagName === 'FORM'
+        ? e.target.querySelector('input[type=text]')
+        : e.target
+      if (!input || !input.value) return
 
-    for (const item of this.refs.items || []) {
-      const color = item.props['data-color']
-      const { name } = item.toJson()
-      colors[color] = name
+      Store.colors.update(colors => {
+        colors[hex] = input.value
+        return colors
+      }, true)
+      Store.dirty.set(true)
     }
-
-    return colors
-  }
-
-  handleEdit (item) {
-    if (item.props.name === item.toJson().name) return
-    Store.dirty.set(true)
   }
 
   handlePreview (name) {
-    window.location.href = Store.highlighted.current && Store.highlighted.current.match(name)
-      ? window.location.origin
-      : window.location.origin + '?' + name
+    if (!name) return noop
+    name = name.toLowerCase()
+    return e => {
+      Store.filter.update((names = []) => {
+        if (e.target.checked) names.push(name)
+        else names.splice(names.indexOf(name), 1)
+        return Array.from(new Set([...names]))
+      }, true)
+    }
   }
 }

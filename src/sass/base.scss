@@ -1,6 +1,8 @@
 html {
+  @include no-select;
   font-size: 62.5%;
   box-sizing: border-box;
+  scroll-snap-type: y mandatory;
 }
 
 *,
@@ -11,7 +13,7 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100%;
-  background: #efefef;
+  background: $color-background;
 
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica, Arial, sans-serif, Apple Color Emoji, Segoe UI Emoji, Segoe UI Symbol;
   font-size: 1.4rem;
@@ -21,18 +23,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   -webkit-text-size-adjust: 100%;
-
-  @include devices (tablet, desktop) {
-    width: 100vw;
-    height: 100vh;
-    overflow: hidden;
-    overscroll-behavior: contain;
-  }
 }
 
-[contentEditable][placeholder]:empty:not(:focus)::before {
-  pointer-events: none;
-  content: attr(placeholder);
-  opacity: 0.3;
+input[type=text]:placeholder-shown {
   font-style: italic;
+  color: #999 !important;
+}
+
+input[type=text]:focus::placeholder {
+  color: transparent;
 }

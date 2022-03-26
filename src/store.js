@@ -1,30 +1,21 @@
-import { derived, writable } from 'utils/state'
+import { writable } from 'utils/state'
 
 const Store = {
-  columns: writable(['items']),
+  columns: writable(['untitled']),
   colors: writable({}),
+  items: writable([]),
 
   authenticated: writable(false),
-  items: writable([]),
   dirty: writable(false),
 
-  highlighted: undefined
+  filter: writable(
+    window.location.hash
+      .substr(1)
+      .split(',')
+      .filter(Boolean)
+      .map(name => name.toLowerCase())
+  )
 }
-
-// Allow highlighting items via https://…/?query with query being the color name
-Store.highlighted = derived(Store.colors, (colors = {}) => {
-  const hash = window.location.href.match(/\?(.*)\/?/)
-  if (!hash || !hash[1]) return
-
-  const match = name => encodeURIComponent(name).toUpperCase() === hash[1].toUpperCase()
-
-  for (const hex in colors) {
-    const name = colors[hex]
-    if (name && match(name)) {
-      return { color: hex, match }
-    }
-  }
-})
 
 window.Store = Store
 export default Store
