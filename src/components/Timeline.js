@@ -83,6 +83,7 @@ export default class Timeline extends Component {
                   .sort((a, b) => a.timeline.index - b.timeline.index)
                   .map(item => <Item data={item} sortable resizable />)
               }
+              <li class='fake item' />
             </ul>
           </div>
         </div>
@@ -132,7 +133,7 @@ export default class Timeline extends Component {
 
       // Update timeline indexes
       let index = 0
-      for (const { id } of this.refs.timeline.querySelectorAll('.item')) {
+      for (const { id } of this.refs.timeline.querySelectorAll('.item:not(.fake)')) {
         const item = find(id)
         item.timeline = item.timeline || { start: 48 * YEAR_PROGRESS, end: 48 * YEAR_PROGRESS + 4 }
         item.timeline.index = index++

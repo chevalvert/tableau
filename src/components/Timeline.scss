@@ -105,6 +105,14 @@
     padding: 0 1.5rem 1.5rem;
   }
 
+  // Artificially add a last full-width item so that sortablejs allow dropping
+  // new items anywhere below it
+  &__items .item.fake {
+    height: 0;
+    padding: 0;
+    margin: 0;
+  }
+
   // Artificially stretch item to viewport width while sorting, so that
   // sortablejs can trigger anywhere on the item line, not only on its bbox
   &.has-sorting &__items .item::after {
