@@ -1,6 +1,6 @@
 import Store from 'store'
 import { Component } from 'utils/jsx'
-import Sortable from 'sortablejs'
+import { Sortable } from 'sortablejs/modular/sortable.core.esm.js'
 import hash from 'object-hash'
 import Item from 'components/Item'
 
@@ -109,12 +109,16 @@ export default class Timeline extends Component {
       this.sortables.push(Sortable.create(ref, {
         group: 'timeline',
         handle: '.item__handle',
-        onEnd: this.handleSort
+        onSort: this.handleSort,
+        axis: 'vertical',
+        onStart: () => this.base.classList.add('has-sorting'),
+        onEnd: () => this.base.classList.remove('has-sorting')
       }))
     }
   }
 
   handleSort (e) {
+    if (!this.refs) return
     const previous = hash(Store.items.get())
 
     Store.items.update(items => {

@@ -39,7 +39,10 @@
   }
 
   &.sortable-ghost {
-    visibility: hidden;
+    opacity: 0.1;
+    * {
+      visibility: hidden;
+    }
   }
 
   &.sortable-chosen {

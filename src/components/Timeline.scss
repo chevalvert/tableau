@@ -105,14 +105,20 @@
     padding: 0 1.5rem 1.5rem;
   }
 
+  // Artificially stretch item to viewport width while sorting, so that
+  // sortablejs can trigger anywhere on the item line, not only on its bbox
+  &.has-sorting &__items .item::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -9999px;
+    right: -9999px;
+    bottom: 0;
+  }
+
   .item {
     margin-left: calc(100% / 48 * (var(--start)));
     width: calc(100% / 48 * (var(--end) - var(--start)));
-
-    &.sortable-ghost {
-      width: 100%;
-      margin-left: 0;
-    }
 
     &.is-small .item__content:hover {
       width: fit-content;
