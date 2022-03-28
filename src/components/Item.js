@@ -152,8 +152,8 @@ export default class Item extends Component {
     if (!timeline) return
     this.base.style.setProperty('--start', timeline.start)
     this.base.style.setProperty('--end', timeline.end)
-    this.base.classList.toggle('is-small', timeline.end - timeline.start < 3)
-    this.base.classList.toggle('is-large', timeline.end - timeline.start > 10)
+    this.base.classList.toggle('is-small', timeline.end - timeline.start <= 4)
+    this.base.classList.toggle('is-large', timeline.end - timeline.start >= 10)
   }
 
   handleData (data) {

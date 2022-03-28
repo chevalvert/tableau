@@ -6,6 +6,7 @@
   &__content {
     display: flex;
     width: 100%;
+    margin: -5px 0;
   }
 
   .button, .icon {
@@ -17,7 +18,8 @@
 
   &__handle {
     @include easing(120ms, opacity);
-    margin-top: 6px;
+    margin-top: 11px;
+    min-width: 1.2rem;
     .item:not(:hover) & { opacity: 0.6; }
   }
 
@@ -26,7 +28,7 @@
   }
 
   &__buttons .button {
-    margin-top: 5px;
+    margin-top: 11px;
     padding: 0 1.3rem;
   }
 
@@ -105,7 +107,7 @@
       @include reset-button;
       position: relative;
       cursor: pointer;
-      margin-top: 4px;
+      margin-top: 10px;
       height: 1.4rem;
       width: 1.4rem;
       margin-left: 3px;

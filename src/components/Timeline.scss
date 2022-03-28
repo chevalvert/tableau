@@ -114,8 +114,10 @@
       margin-left: 0;
     }
 
-    &.is-small .item__colors {
-      display: none;
+    &.is-small .item__content:hover {
+      width: fit-content;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 3px;
     }
   }
 
