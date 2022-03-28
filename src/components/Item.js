@@ -104,6 +104,7 @@ export default class Item extends Component {
         <div class='item__content'>
           {props.sortable && <Icon name='bars' class='item__handle' />}
           <div
+            contentEditable
             placeholder={props.placeholder}
             class='item__name'
             ref={this.ref('content')}
