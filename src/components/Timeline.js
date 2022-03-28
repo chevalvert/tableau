@@ -135,7 +135,7 @@ export default class Timeline extends Component {
       let index = 0
       for (const { id } of this.refs.timeline.querySelectorAll('.item:not(.fake)')) {
         const item = find(id)
-        item.timeline = item.timeline || { start: 48 * YEAR_PROGRESS, end: 48 * YEAR_PROGRESS + 4 }
+        item.timeline = item.timeline || { start: Math.round(48 * YEAR_PROGRESS), end: 48 * YEAR_PROGRESS + 4 }
         item.timeline.index = index++
       }
 
