@@ -29,6 +29,8 @@
   }
 
   &__content {
+    display: flex;
+    flex-direction: column;
     position: relative;
     width: min-content;
     min-height: 100%;
@@ -80,7 +82,7 @@
     pointer-events: none;
     display: flex;
     padding: 0 1.5rem;
-    bottom: -5rem;
+    bottom: 0rem;
   }
 
   &__ticks &__week {
@@ -93,12 +95,13 @@
     z-index: 2;
     position: absolute;
     top: 0;
-    bottom: -5rem;
+    bottom: 0;
     border-left: 2px solid #ff6188;
     left: calc(100% * var(--start));
   }
 
   &__items {
+    flex: 1;
     padding: 0 1.5rem 1.5rem;
   }
 
