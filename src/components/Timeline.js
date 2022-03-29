@@ -2,6 +2,7 @@ import Store from 'store'
 import { Component } from 'utils/jsx'
 import { Sortable } from 'sortablejs/modular/sortable.core.esm.js'
 import hash from 'object-hash'
+import { clamp, map } from 'missing-math'
 import Item from 'components/Item'
 
 const MONTHS = [
@@ -110,32 +111,43 @@ export default class Timeline extends Component {
       this.sortables.push(Sortable.create(ref, {
         group: 'timeline',
         handle: '.item__handle',
-        onSort: this.handleSort,
         axis: 'vertical',
         onStart: () => this.base.classList.add('has-sorting'),
-        onEnd: () => this.base.classList.remove('has-sorting')
+        onEnd: this.handleSort
       }))
     }
   }
 
   handleSort (e) {
+    this.base.classList.remove('has-sorting')
     if (!this.refs) return
+
     const previous = hash(Store.items.get())
 
     Store.items.update(items => {
       const find = id => items.find(item => item.index === +id)
+      const current = find(e.item.id)
 
       // Handle item dropped into the void
-      if (e.to === this.refs.void) {
-        const item = find(e.item.id)
-        if (item) delete item.timeline
+      if (e.to === this.refs.void && current) delete current.timeline
+
+      // Update item timeline range
+      if (current) {
+        if (!current.timeline) current.timeline = {}
+
+        const left = e.originalEvent.clientX + this.refs.scrollable.scrollLeft
+        const d = Math.floor(map(left, 0, e.item.parentNode.offsetWidth, 0, 48)) - (current.timeline.start || 0)
+
+        current.timeline.start = clamp((current.timeline.start || 0) + d, 0, 48)
+        current.timeline.end = current.timeline.end
+          ? clamp(current.timeline.end + d, 0, 48)
+          : current.timeline.start + 4
       }
 
-      // Update timeline indexes
+      // Update all items indexes
       let index = 0
       for (const { id } of this.refs.timeline.querySelectorAll('.item:not(.fake)')) {
         const item = find(id)
-        item.timeline = item.timeline || { start: Math.round(48 * YEAR_PROGRESS), end: 48 * YEAR_PROGRESS + 4 }
         item.timeline.index = index++
       }
 
