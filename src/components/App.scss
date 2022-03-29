@@ -7,10 +7,12 @@
 
   .items, .timeline {
     scroll-snap-align: start end;
-    height: calc(100vh - 5rem);
+    height: calc(100vh - 4.8rem);
   }
 
-  .colors {}
+  .colors {
+    margin-top: -1px;
+  }
 
   .icon--dirty {
     @include easing(120ms, opacity);
