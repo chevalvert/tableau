@@ -133,12 +133,12 @@
       background: rgba(0, 0, 0, 0.3);
       border-radius: 3px;
     }
+  }
 
-    &.sortable-ghost {
-      width: 100%;
-      margin-left: 0;
-      transform: scale(1, 0.1) !important;
-    }
+  &__items .item.sortable-ghost {
+    width: 100%;
+    margin-left: 0;
+    transform: scale(1, 0.1) !important;
   }
 
   &__items .item__content {

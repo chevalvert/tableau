@@ -128,9 +128,6 @@ export default class Timeline extends Component {
       const find = id => items.find(item => item.index === +id)
       const current = find(e.item.id)
 
-      // Handle item dropped into the void
-      if (e.to === this.refs.void && current) delete current.timeline
-
       // Update item timeline range
       if (current) {
         if (!current.timeline) current.timeline = {}
@@ -143,6 +140,9 @@ export default class Timeline extends Component {
           ? clamp(current.timeline.end + d, 0, 48)
           : current.timeline.start + 4
       }
+
+      // Handle item dropped into the void
+      if (e.to === this.refs.void && current) delete current.timeline
 
       // Update all items indexes
       let index = 0
