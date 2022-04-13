@@ -2,6 +2,7 @@ import Store from 'store'
 import { Component } from 'utils/jsx'
 import { Sortable } from 'sortablejs/modular/sortable.core.esm.js'
 import hash from 'object-hash'
+import groupBy from 'utils/array-group-by'
 import { clamp, map } from 'missing-math'
 import Item from 'components/Item'
 
@@ -39,6 +40,19 @@ export default class Timeline extends Component {
       for (let i = 0; i < 4; i++) {
         ticks.push({ month, week: week++ })
       }
+    }
+
+    const voids = []
+    for (const [columnIndex, items] of Object.entries(groupBy(Store.items.current.filter(item => !item.timeline), 'column'))) {
+      voids.push(
+        <ul
+          class='timeline__void'
+          ref={this.refArray('voids')}
+          data-label={Store.columns.current[columnIndex]}
+        >
+          {items.map(item => <Item data={item} sortable />)}
+        </ul>
+      )
     }
 
     return (
@@ -88,16 +102,7 @@ export default class Timeline extends Component {
             </ul>
           </div>
         </div>
-        <div
-          class='timeline__void'
-          ref={this.ref('void')}
-        >
-          {
-            Store.items.current
-              .filter(item => !item.timeline)
-              .map(item => <Item data={item} sortable />)
-          }
-        </div>
+        <div class='timeline__voids' ref={this.ref('void')}>{voids}</div>
       </section>
     )
   }
@@ -107,7 +112,7 @@ export default class Timeline extends Component {
     this.refs.scrollable.scrollLeft = _scrollLeft
 
     this.sortables = []
-    for (const ref of [this.refs.timeline, this.refs.void]) {
+    for (const ref of [this.refs.timeline, ...this.refs.voids || []]) {
       this.sortables.push(Sortable.create(ref, {
         group: 'timeline',
         handle: '.item__handle',
@@ -142,7 +147,7 @@ export default class Timeline extends Component {
       }
 
       // Handle item dropped into the void
-      if (e.to === this.refs.void && current) delete current.timeline
+      if (current && this.refs.voids.includes(e.to)) delete current.timeline
 
       // Update all items indexes
       let index = 0

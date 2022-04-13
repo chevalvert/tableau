@@ -8,13 +8,36 @@
     flex: 1;
   }
 
-  &__void {
+  &__voids {
     @include invisible-scroll;
-
+    display: flex;
     border-top: 1px solid $color-border;
     padding: 1.5rem;
+    gap: 3px;
+  }
+
+  // DEBUG
+  &:not(.has-sorting) &__voids:hover {
+    flex-direction: column;
+  }
+
+  &__void {
+    position: relative;
     display: flex;
+    align-items: center;
     gap: 5px;
+
+    &::before {
+      // content: attr(data-label);
+      white-space: nowrap;
+      font-variant: small-caps;
+      font-weight: normal;
+      text-transform: lowercase;
+      font-size: 1.4rem;
+      min-width: 10rem;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .item {
       --start: 0 !important;
@@ -26,6 +49,10 @@
         display: none;
       }
     }
+  }
+
+  &__voids:not(:hover) &__void::before {
+    display: none;
   }
 
   &__content {
