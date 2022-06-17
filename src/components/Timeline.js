@@ -170,8 +170,11 @@ export default class Timeline extends Component {
   handleScroll (e) {
     if (e.metaKey) {
       const dir = Math.sign(e.deltaY)
+      const pzoom = this.state.zoom
       this.state.zoom = clamp(this.state.zoom + (dir * 0.1), 0.5, 3)
       this.base.style.setProperty('--zoom', this.state.zoom)
+      // TODO: center scroll around mouse position
+      this.refs.scrollable.scrollLeft += this.refs.scrollable.scrollLeft * (this.state.zoom - pzoom)
       e.preventDefault()
     }
 
