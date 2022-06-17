@@ -31,6 +31,10 @@ export default class Timeline extends Component {
   beforeRender (props) {
     this.handleSort = this.handleSort.bind(this)
     this.handleScroll = this.handleScroll.bind(this)
+
+    this.state = {
+      zoom: 1
+    }
   }
 
   template (props, state) {
@@ -59,7 +63,7 @@ export default class Timeline extends Component {
       <section class='timeline'>
         <div
           class='timeline__scrollable'
-          event-scroll={this.handleScroll}
+          event-wheel={this.handleScroll}
           ref={this.ref('scrollable')}
         >
           <div class='timeline__content'>
@@ -164,6 +168,13 @@ export default class Timeline extends Component {
   }
 
   handleScroll (e) {
+    if (e.metaKey) {
+      const dir = Math.sign(e.deltaY)
+      this.state.zoom = clamp(this.state.zoom + (dir * 0.1), 0.5, 3)
+      this.base.style.setProperty('--zoom', this.state.zoom)
+      e.preventDefault()
+    }
+
     _scrollTop = this.refs.scrollable.scrollTop
     _scrollLeft = this.refs.scrollable.scrollLeft
   }

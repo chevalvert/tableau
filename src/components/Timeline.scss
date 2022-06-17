@@ -1,4 +1,6 @@
 .timeline {
+  --zoom: 1;
+
   position: relative;
   display: flex;
   flex-direction: column;
@@ -101,7 +103,7 @@
 
   &__week {
     flex: 1;
-    min-width: 5rem;
+    min-width: Max(calc((100vw - 4rem) / (12 * 4)), calc(5rem * var(--zoom, 1)));
   }
 
   &__ticks {
